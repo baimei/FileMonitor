@@ -9,7 +9,7 @@ public class FileSender{
     arg[0]="udp";
     arg[1]="localhost";
     arg[2]="1000";
-    arg[3]="D:\\11.txt";
+    arg[3]="D:\\xuliang";
 	Sender theSender;
 	int thePort = 0;
 	File theFile;
@@ -37,13 +37,15 @@ public class FileSender{
 
 
 	// Create the sender object
-	if (arg[0].equals("tcp")) 
+	if (arg[0].equals("udp")) {
 	    theSender = new UDPSender(theAddress, thePort);
+	    theSender.sendFoldersALL(theFile);
+	}
 	else 
 	    theSender = new TCPSender(theAddress, thePort);
 
 	// Send the file
-	theSender.sendFile(theFile);
+	
     }
 
     public static void printError(String error)

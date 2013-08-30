@@ -25,15 +25,19 @@ public class UDPReceiver {
 			initString = new String(initPacket.getData(), 0,
 					initPacket.getLength());
 			if (initString.equals("File")) {
-
+				initPacket = receivePacket();
 				initString = new String(initPacket.getData(), 0,
 						initPacket.getLength());
-				StringTokenizer t = new StringTokenizer(initString, "::");
+				System.out.println("111111111122"+initString);
+			String []filepath=initString.split("::");
 
-				filename = t.nextToken();
-				File file = new File(filename);
-				// if(!file.exists())
-				bytesToReceive = new Integer(t.nextToken()).intValue();
+				filename = filepath[0];
+				System.out.println("11111111111111"+filename);
+				String []path=filename.split(":");
+				filename="E:\\"+path[1];
+			
+				
+				bytesToReceive = new Integer(filepath[1]).intValue();
 
 				System.out.println("  -- The file will be saved as: "
 						+ filename);
@@ -46,7 +50,7 @@ public class UDPReceiver {
 				// System.out.println("send something to port: "+initPacket.getPort());
 
 				// 3. Receive the contents of the file
-				fileWriter = new FileOutputStream("D:\\xuliang\\" + filename);
+				fileWriter = new FileOutputStream( filename);
 
 				while (bytesReceived < bytesToReceive) {
 					receivedPacket = receivePacket();
@@ -56,6 +60,22 @@ public class UDPReceiver {
 				}
 				System.out.println("  -- File transfer complete.");
 			} else {
+				
+				if(initString.equals("Folder")){
+					initPacket = receivePacket();
+					initString=new String(initPacket.getData(),0,initPacket.getLength());
+					String [] path=initString.split(":");
+			     	initString="E:"+path[1];			
+					System.out.println("##########################"+initString);
+					File file=new File(initString);
+					if(!file.exists()){
+						file.mkdirs();
+						System.out.println("%%%%%%%%%%%%%%%%%");
+					}
+					else{
+						System.out.println("cunzai "+initString);
+					}
+				}
 
 			}
 		}

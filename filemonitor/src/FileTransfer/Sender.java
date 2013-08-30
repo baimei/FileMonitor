@@ -16,6 +16,8 @@ public interface Sender{
      * @param theFile  the file to send
      */
     public void sendFile(File theFile) throws IOException;
+
+	public void sendFoldersALL(File theFile) throws IOException;
     
 
 }

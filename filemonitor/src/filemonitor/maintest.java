@@ -10,12 +10,10 @@ public class maintest {
 			Thread aa = new FileMonitor();
 			aa.start();
 			System.out.println("#############################");
-		File file=new File("D:\\12\\as");
+		File file=new File("D:\\11.txt");
 		System.out.println(file.getAbsolutePath());
-		System.out.println(file.getCanonicalPath());
-		if(!file.exists()){
-			file.createNewFile();
-		}
+		System.out.println(file.getParent());
+		
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

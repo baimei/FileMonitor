@@ -7,7 +7,7 @@ public class FileReceiver {
 	public static void main(String[] args) throws IOException {
 
 			String arg[] = new String[2];
-			arg[0] = "tcp";
+			arg[0] = "udp";
 			arg[1] = "1000";
 			int thePort = 0;
 

@@ -132,4 +132,11 @@ public class TCPSender implements Sender{
 		else{System.out.println("  -- Recieved something other than OK... exiting");}
 		
 	}
+
+
+	@Override
+	public void sendFoldersALL(File theFile) {
+		// TODO Auto-generated method stub
+		
+	}
 	}
