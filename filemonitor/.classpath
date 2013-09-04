@@ -4,5 +4,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="src/filemonitor/jnotify-0.94.jar"/>
 	<classpathentry kind="lib" path="src/filemonitor/mail.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator/git/FileMonitor/filemonitor/src/filemonitor/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator/git/FileMonitor/filemonitor/src/filemonitor/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator/git/FileMonitor/filemonitor/src/filemonitor/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator/git/FileMonitor/filemonitor/src/filemonitor/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator/git/FileMonitor/filemonitor/src/filemonitor/ezmorph-1.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator/git/FileMonitor/filemonitor/src/filemonitor/org.json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

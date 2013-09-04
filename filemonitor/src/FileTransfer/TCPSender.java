@@ -45,32 +45,36 @@ public class TCPSender implements Sender{
      *
      * @param theFile  the file to send
      */
-    public void sendFile(File theFile) throws IOException{
 
-    
-	// Init stuff
-	fileReader = new FileInputStream(theFile);
-	fileLength = fileReader.available();
+    public void sendFile(File theFile) throws IOException {
+		// Init stuff
+		fileReader = new FileInputStream(theFile);
+		fileLength = fileReader.available();
+
+		System.out.println(" -- Filename: " + theFile.getName());
+		System.out.println(" -- Bytes to send: " + fileLength);
+		
+		theOutstream.write(("File").getBytes());
+		theOutstream.flush();
 	
-	System.out.println(" -- Filename: "+theFile.getName());
-	System.out.println(" -- Bytes to send: "+fileLength);
-
-	// 1. Send the filename and length to the receiver
-	theOutstream.write((theFile.getName()+"::"+fileLength).getBytes());
-	theOutstream.flush();
-
-
-	// 2. Wait for a reply from the receiver	
-	System.out.println(" -- Waiting for OK from the receiver");
-	length = 0;
-	while (length <= 0){
-	    length = theInstream.read(buffer);
-	    if (length>0) initReply = (new String(buffer, 0, length));
-	}
+		length = 0;
+		while (length <= 0){
+		    length = theInstream.read(buffer);
+		    if (length>0) initReply = (new String(buffer, 0, length));
+		}
 	
-	
-	// 3. Send the content of the file
-	if (initReply.equals("OK"))
+		theOutstream.write((theFile.getAbsolutePath() + "::" + fileLength).getBytes());
+		theOutstream.flush();
+		// 2. Wait for a reply from the receiver
+		
+		length = 0;
+		while (length <= 0){
+		    length = theInstream.read(buffer);
+		    if (length>0) initReply = (new String(buffer, 0, length));
+		}
+
+		// 3. Send the content of the file
+		if (initReply.equals("OK"))
 	    {
 		System.out.println("  -- Got OK from receiver - sending the file ");
 
@@ -79,64 +83,62 @@ public class TCPSender implements Sender{
 		    //System.out.println("Will read at pos: "+currentPos);
 		    bytesRead = fileReader.read(msg);
 		    theOutstream.write(msg);
+		   
 		    //System.out.println("Bytes read: "+bytesRead);
 		    currentPos = currentPos + bytesRead;
 		}
-		
+		theOutstream.flush();
 		
 		System.out.println("  -- File transfer complete...");
 	    }
 	else{System.out.println("  -- Recieved something other than OK... exiting");}
-    }
+    
+	}
 
-	public void sendFolder(File folderPath) throws IOException{
+	public void sendFolder(File folderPath) throws IOException {
 		
-		// Init stuff
-		fileReader = new FileInputStream(theFile);
-		fileLength = fileReader.available();
-		
-		System.out.println(" -- Filename: "+theFile.getName());
-		System.out.println(" -- Bytes to send: "+fileLength);
-
-		// 1. Send the filename and length to the receiver
-		theOutstream.write((theFile.getName()+"::"+fileLength).getBytes());
+		theOutstream.write(("Folder").getBytes());
 		theOutstream.flush();
-
-
-		// 2. Wait for a reply from the receiver	
-		System.out.println(" -- Waiting for OK from the receiver");
 		length = 0;
 		while (length <= 0){
 		    length = theInstream.read(buffer);
 		    if (length>0) initReply = (new String(buffer, 0, length));
 		}
+		theOutstream.write((folderPath.getAbsoluteFile().toString()).getBytes());
+		theOutstream.flush();
 		
-		
-		// 3. Send the content of the file
-		if (initReply.equals("OK"))
-		    {
-			System.out.println("  -- Got OK from receiver - sending the file ");
 
-			
-			while (currentPos<fileLength){
-			    //System.out.println("Will read at pos: "+currentPos);
-			    bytesRead = fileReader.read(msg);
-			    theOutstream.write(msg);
-			    //System.out.println("Bytes read: "+bytesRead);
-			    currentPos = currentPos + bytesRead;
-			}
-			
-			
-			System.out.println("  -- File transfer complete...");
-		    }
-		else{System.out.println("  -- Recieved something other than OK... exiting");}
-		
 	}
 
+	public void sendFoldersALL(File folderPath) throws IOException {
+		// Init stuff
+		if (!folderPath.exists()) {
+			new IOException(folderPath.getAbsolutePath() + "不存在");
+		}
+		if (folderPath.isDirectory()) {
+			sendFolder(folderPath);
+			System.out.println("会更好的获得更好"+folderPath.getAbsolutePath());
+			String fileList[] = folderPath.list();
+			for (int i = 0; i < fileList.length; i++) {
+				System.out.println("会更好的获得更好"+fileList[i]+"        "+fileList.length);
+				File temp = null;
+				if (folderPath.getAbsolutePath().endsWith(File.separator)) {
+					temp = new File(folderPath.getAbsolutePath() + fileList[i]);
+				} else {
+					temp = new File(folderPath.getAbsolutePath()
+							+ File.separator + fileList[i]);
+				}
+				System.out.println("会更好的获得更好"+temp.getAbsolutePath());
+				if (temp.isFile()) {
+					sendFile(temp);
+					System.out.println("会更好的获得更好111");
+				}
+				if (temp.isDirectory()) {
+					sendFoldersALL(temp);
+					System.out.println("会更好的获得更好222");
+				}
+			}
+		}
 
-	@Override
-	public void sendFoldersALL(File theFile) {
-		// TODO Auto-generated method stub
-		
 	}
 	}

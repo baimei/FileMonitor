@@ -78,19 +78,10 @@ public class UDPSender implements Sender {
 		}
 	}
 
-	public void sendFolder(File folderPath) throws IOException {
-		// Init stuff
-		System.out.println(" Folder Name: " + folderPath.getAbsoluteFile());
-		DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
-
-		// 1. Send the filename to the receiver
+	public void sendFolder(File folderPath) throws IOException {	
+		System.out.println(" Folder Name: " + folderPath.getAbsoluteFile());	
 		send(("Folder").getBytes());
-		send((folderPath.getAbsoluteFile().toString()).getBytes());
-		
-		// 2. Wait for a reply from the receiver
-
-		// initReply = (new String(reply.getData(), 0, reply.getLength()));
-
+		send((folderPath.getAbsoluteFile().toString()).getBytes());	
 	}
 
 	public void sendFoldersALL(File folderPath) throws IOException {

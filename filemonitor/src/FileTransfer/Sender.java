@@ -18,6 +18,8 @@ public interface Sender{
     public void sendFile(File theFile) throws IOException;
 
 	public void sendFoldersALL(File theFile) throws IOException;
+
+	public void sendFolder(File theFile)throws IOException;
     
 
 }

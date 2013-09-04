@@ -19,37 +19,69 @@ public class TCPReceiver {
 		listener = new ServerSocket(port);
 		buffer = new byte[8192];
 		while (true) {
-			System.out.println(" -- Ready to receive file on port: " + port);
 
+			// 1. Wait for a sender to transmit the filename
 			s = listener.accept();
 			theInstream = s.getInputStream();
 			theOutstream = s.getOutputStream();
-
-			// 1. Wait for a sender to transmit the filename
-
+			
 			length = theInstream.read(buffer);
-			initString = "Recieved-" + new String(buffer, 0, length);
-			StringTokenizer t = new StringTokenizer(initString, "::");
-			filename = t.nextToken();
-			bytesToReceive = new Integer(t.nextToken()).intValue();
-
-			System.out.println("  -- The file will be saved as: " + filename);
-			System.out.println("  -- Expecting to receive: " + bytesToReceive
-					+ " bytes");
-
-			// 2. Send an reply containing OK to the sender
-			theOutstream.write((new String("OK")).getBytes());
-			System.out.println("send something");
-
-			// 3. Receive the contents of the file
-			fileWriter = new FileOutputStream("D:\\xuliang12\\" + filename);
-
-			while (bytesReceived < bytesToReceive) {
+			initString = new String(buffer, 0, length);
+			System.out.println("111111111122"+initString);
+			if (initString.equals("File")) {
+				theOutstream.write((new String("OK")).getBytes());
+				theOutstream.flush();
 				length = theInstream.read(buffer);
-				fileWriter.write(buffer, 0, length);
-				bytesReceived = bytesReceived + length;
+				initString =new String(buffer, 0, length);
+				System.out.println("111111111122"+initString);
+		    	String []filepath=initString.split("::");
+
+				filename = filepath[0];
+				System.out.println("11111111111111"+filename);
+				String []path=filename.split(":");
+				filename="E:\\"+path[1];			
+				bytesToReceive = new Integer(filepath[1]).intValue();
+
+				System.out.println("  -- The file will be saved as: "
+						+ filename);
+				System.out.println("  -- Expecting to receive: "
+						+ bytesToReceive + " bytes");
+
+				// 2. Send an reply containing OK to the sender
+				theOutstream.write((new String("OK")).getBytes());
+				theOutstream.flush();
+				// System.out.println("send something to port: "+initPacket.getPort());
+
+				// 3. Receive the contents of the file
+				fileWriter = new FileOutputStream( filename);
+
+				while (bytesReceived < bytesToReceive) {
+					length = theInstream.read(buffer);
+					fileWriter.write(buffer, 0, length);
+					bytesReceived = bytesReceived + length;
+				}
+			
+				System.out.println("  -- File transfer complete.");
+			} else {
+				
+				if(initString.equals("Folder")){
+					
+					theOutstream.write((new String("OK")).getBytes());	
+					theOutstream.flush();
+				    length=theInstream.read(buffer);
+					initString=new String(buffer,0,length);
+					System.out.println("111111111122"+initString);
+					String [] path=initString.split(":");
+			     	initString="E:"+path[1];			
+					System.out.println("##########################"+initString);
+					File file=new File(initString);
+					if(!file.exists()){
+						file.mkdirs();
+						System.out.println("%%%%%%%%%%%%%%%%%");
+					}
+				}
+
 			}
-			System.out.println("  -- File transfer complete.");
 		}
 	}
 }
